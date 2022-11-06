@@ -8,7 +8,7 @@
 </head>
 <body>
     <%- include('header.ejs') %>
-    <%- include('footer.ejs') %>
+    
     <table>
         <% for ( var i = 0; i< allTodos.length; i++){%>
         <tr>
@@ -18,5 +18,6 @@
         </tr>
         <%} %>
     </table>
+    <%- include('footer.ejs') %>
 </body>
 </html>
