@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended:false}))
 //app.Method(path,callback[,callback....])
 app.set("view engine","ejs");
 
-//app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static(path.join(__dirname,"public")))
 
 app.get("/",async (request,response) => {
   // const overdue = await Todo.overdue()
