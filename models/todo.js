@@ -19,6 +19,32 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
+    static overdue(){
+      return this.findAll({
+        where:{
+          dueDate: { [Op.lt]: new Date().toLocaleDateString("en-CA") },
+          completed:false,
+        }
+      })
+    }
+    static dueToday(){
+      return this.findAll({
+        where: {
+          dueDate: { [Op.eq]: new Date().toLocaleDateString("en-CA") },
+          completed:false,
+        },
+
+      })
+    }
+    static dueLater(){
+      return this.findAll({
+        where: {
+          dueDate: { [Op.gt]: new Date().toLocaleDateString("en-CA") },
+          completed:false,
+        },
+
+      })
+    }
   }
   Todo.init(
     {
