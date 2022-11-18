@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
 const { Todo } = require("./models");
+const todo = require("./models/todo")
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 //app.Method(Path,Handler)
