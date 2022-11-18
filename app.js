@@ -5,34 +5,34 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { Todo } = require("./models");
 app.use(bodyParser.json());
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({ extended: false }));
 //app.Method(Path,Handler)
 //or
 //app.Method(path,callback[,callback....])
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
 
-app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/",async (request,response) => {
-  const allTodos = await Todo.getTodos()
-  const overdue = await Todo.overdue()
-  const dueToday = await Todo.dueToday()
-  const dueLater = await Todo.dueLater()
-  if(request.accepts("html")){
-    response.render('index',{
-      title:"Todo app",
+app.get("/", async (request, response) => {
+  const allTodos = await Todo.getTodos();
+  const overdue = await Todo.overdue();
+  const dueToday = await Todo.dueToday();
+  const dueLater = await Todo.dueLater();
+  if (request.accepts("html")) {
+    response.render("index", {
+      title: "Todo app",
       overdue,
       dueToday,
       dueLater,
-    })
-  }else{
-    response.json(overdue,dueLater,dueToday)
+    });
+  } else {
+    response.json(overdue, dueLater, dueToday);
   }
 });
 
 app.get("/todos", (request, response) => {
   //response.send("hello ")
-  console.log("Todo list",request.body);
+  console.log("Todo list", request.body);
 });
 
 app.post("/todos", async (request, response) => {
