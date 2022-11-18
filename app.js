@@ -26,9 +26,7 @@ app.get("/",async (request,response) => {
       dueLater,
     })
   }else{
-    response.json({
-      overdue,dueLater,dueToday
-    })
+    response.json(overdue,dueLater,dueToday)
   }
 });
 
