@@ -45,6 +45,26 @@ module.exports = (sequelize, DataTypes) => {
 
       })
     }
+    static completedItems(id){
+      return this.findAll({
+        where:{
+          completed: true
+        }
+      })
+    }
+    static remove(id){
+      return this.destroy({
+        where:{
+          id,
+        }
+      })
+    }
+    deleteTodo(){
+      return this.removetask(id)
+    }
+    setCompletionStatus(bool){
+      return this.update({completed:bool})
+    }
   }
   Todo.init(
     {
