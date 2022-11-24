@@ -26,7 +26,7 @@ describe("Todo Application", function () {
     }
   });
 
-  test("Creates a todo ", async () => {
+  test("Creates a new todo ", async () => {
     const res = await agent.get("/");
     const csrfToken = extractCsrfToken(res);
     const response = await agent.post("/todos").send({
@@ -44,7 +44,7 @@ describe("Todo Application", function () {
   //   expect(parsedResponse.id).toBeDefined();
   // });
 
-  test("Marks a todo with the given ID as complete", async () => {
+  test("Updating a Todo", async () => {
    try{ let res = await agent.get("/");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({

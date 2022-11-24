@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     static completedItems(id){
       return this.findAll({
         where:{
-          completed: true
+          completed: true,
         }
       })
     }
@@ -62,8 +62,11 @@ module.exports = (sequelize, DataTypes) => {
     deleteTodo(){
       return this.removetask(id)
     }
+    // updateTodo(){
+    // return this.update({completed:true})
+    // }
     setCompletionStatus(bool){
-      return this.update({completed:bool})
+      return this.update({completed:true})
     }
   }
   Todo.init(
