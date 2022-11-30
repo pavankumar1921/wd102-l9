@@ -9,41 +9,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/style.css" rel="stylesheet" />
     <script>
-        var token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content")
-        function updateTodo  (id) {
-        // const bool = document.querySelector(`#checkbox-${id}`).checked
-        // console.log(bool)
+      var token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+        const updateTodo =(id) => {
+        const bool = document.querySelector(`#checkbox-${id}`).checked;
+        console.log(bool);
         fetch(`/todos/${id}`, {
-          method: "PUT",
+          method: "put",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            "_csrf": token,
-            // completed:bool
-          })
+            _csrf: token,
+            completed: bool,
+          }),
         })
           .then((res) => {
             if (res.ok) {
               window.location.reload();
             }
           })
-          .catch((err) => console.error(err))
-      }
-      function deleteTodo(id){
-        fetch(`/todos/${id}`,{
-            method: "delete",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            "_csrf": token
-          })
+          .catch((err) => console.error(err));
+      };
+      function deleteTodo(id) {
+        fetch(`/todos/${id}`, {
+          method: "delete",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            _csrf: token,
+          }),
         })
-        .then((res) => {
+          .then((res) => {
             if (res.ok) {
               window.location.reload();
             }
           })
-          .catch((err) => console.error(err))
+          .catch((err) => console.error(err));
       }
     </script>
   </head>
@@ -52,7 +52,7 @@
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
         <form action="/todos" method="post">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="flex gap-2 py-4">
             <div class="flex-auto">
               <input
@@ -60,7 +60,6 @@
                 name="title"
                 placeholder="What's next?"
                 class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm"
-                required
               />
             </div>
             <div class="flex-auto">
@@ -83,8 +82,8 @@
 
         <%- include('todos.ejs',{title:"Overdue",data: overdue}) %> <%-
         include('todos.ejs',{title:"Due Today",data: dueToday}) %> <%-
-        include('todos.ejs',{title:"Due Later",data: dueLater}) %>
-        <%- include('todos.ejs',{title:"Completed Items",data: completedItems}) %>
+        include('todos.ejs',{title:"Due Later",data: dueLater}) %> <%-
+        include('todos.ejs',{title:"Completed Items",data: completedItems}) %>
 
         <!-- <%- include('footer.ejs') %> -->
       </div>
