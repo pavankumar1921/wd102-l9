@@ -12,15 +12,15 @@
         var token = document
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content")
-        function updateTodo (id) {
+        function updateTodo  (id) {
         // const bool = document.querySelector(`#checkbox-${id}`).checked
         // console.log(bool)
-        fetch(`/todos/${id}/`, {
+        fetch(`/todos/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             "_csrf": token,
-            //completed:bool
+            // completed:bool
           })
         })
           .then((res) => {
