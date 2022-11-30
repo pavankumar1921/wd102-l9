@@ -13,7 +13,7 @@
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
         const updateTodo =(id) => {
-        const bool = document.querySelector(`#checkbox-${id}`).checked;
+        const bool = document.querySelector(`#todo-checkbox-${id}`).checked;
         console.log(bool);
         fetch(`/todos/${id}`, {
           method: "put",

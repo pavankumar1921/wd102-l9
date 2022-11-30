@@ -44,7 +44,7 @@ describe("Todo Application", function () {
   //   expect(parsedResponse.id).toBeDefined();
   // });
 
-  test("Updating a Todo", async () => {
+  test("Marking todo as complete", async () => {
    try{
      let res = await agent.get("/");
     let csrfToken = extractCsrfToken(res);
@@ -71,10 +71,43 @@ describe("Todo Application", function () {
         completed: status,
       });
     const parsedUpdateResponse = JSON.parse(response.text);
-    expect(parsedUpdateResponse.completed).toBe(false);
+    expect(parsedUpdateResponse.completed).toBe(true);
    }catch(error) {
     console.log(error);
    }
+  })
+   test("Marking todo as incomplete", async () => {
+    try{
+      let res = await agent.get("/");
+     let csrfToken = extractCsrfToken(res);
+     await agent.post("/").send({
+       title: "Buy a pen",
+       dueDate: new Date().toISOString(),
+       completed: false,
+       _csrf: csrfToken,
+     });
+     const groupedTodoResponse = await agent
+       .get("/")
+       .set("Accept", "application/json");
+     const parsedGroupedResponse = JSON.parse(groupedTodoResponse.text);
+     const dueTodayCount = parsedGroupedResponse.dueToday.length;
+     const latestTodo = parsedGroupedResponse.dueToday[dueTodayCount - 1];
+     const status = latestTodo.completed ? false : true;
+     res = await agent.get("/");
+     csrfToken = extractCsrfToken(res);
+ 
+     const response = await agent
+       .put(`/todos/${latestTodo.id}`)
+       .send({
+         _csrf: csrfToken,
+         completed: status,
+       });
+     const parsedUpdateResponse = JSON.parse(response.text);
+     expect(parsedUpdateResponse.completed).toBe(false);
+    }catch(error) {
+     console.log(error);
+    }
+  });
     //   const parsedResponse = JSON.parse(response.text);
     //   const todoID = parsedResponse.id;
 
@@ -103,7 +136,7 @@ describe("Todo Application", function () {
 
     //     expect(parsedResponse.length).toBe(4);
     //     expect(parsedResponse[3]["title"]).toBe("Buy ps3");
-    });
+   
 
     test("Delete a todo with ID", async () => {
       try{let res = await agent.get("/");
