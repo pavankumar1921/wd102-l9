@@ -76,6 +76,7 @@ app.put("/todos/:id", async (request, response) => {
     return response.status(422).json(error);
   }
 });
+
 app.delete("/todos/:id", async (request, response) => {
   console.log("delete todo by id:", request.params.id);
   try {
