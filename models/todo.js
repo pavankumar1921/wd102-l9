@@ -1,5 +1,5 @@
 "use strict";
-const { Model,Op } = require("sequelize");
+const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -13,60 +13,58 @@ module.exports = (sequelize, DataTypes) => {
     static addTodo({ title, dueDate }) {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
-    static getTodos(){
-      return this.findAll({order: [["id","ASC"]]})
+    static getTodos() {
+      return this.findAll({ order: [["id", "ASC"]] });
     }
     markAsCompleted() {
       return this.update({ completed: true });
     }
-    static overdue(){
+    static overdue() {
       return this.findAll({
-        where:{
+        where: {
           dueDate: { [Op.lt]: new Date().toLocaleDateString("en-CA") },
-          completed:false,
-        }
-      })
+          completed: false,
+        },
+      });
     }
-    static dueToday(){
+    static dueToday() {
       return this.findAll({
         where: {
           dueDate: { [Op.eq]: new Date().toLocaleDateString("en-CA") },
-          completed:false,
+          completed: false,
         },
-
-      })
+      });
     }
-    static dueLater(){
+    static dueLater() {
       return this.findAll({
         where: {
           dueDate: { [Op.gt]: new Date().toLocaleDateString("en-CA") },
-          completed:false,
+          completed: false,
         },
-
-      })
+      });
     }
-    static completedItems(id){
+    static completedItems(id) {
       return this.findAll({
-        where:{
+        where: {
           completed: true,
-        }
-      })
+        },
+      });
     }
-    static remove(id){
+    static remove(id) {
       return this.destroy({
-        where:{
+        where: {
           id,
-        }
-      })
+        },
+      });
     }
-    deleteTodo(){
-      return this.removetask(id)
+    deleteTodo() {
+      return this.removetask(id);
     }
     // updateTodo(){
     // return this.update({completed:true})
     // }
     setCompletionStatus(bool) {
-    return this.update({completed:bool})
+      return this.update({ completed: bool });
     }
   }
   Todo.init(
