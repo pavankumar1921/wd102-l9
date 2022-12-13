@@ -88,12 +88,12 @@ describe("Todo Application", function () {
     let aga = await agent.get("/");
     let csrfToken2 = extractCsrfToken(aga);
     await agent.post("/todos").send({
-    _csrf: csrfToken2,
+      _csrf: csrfToken2,
     });
 
     aga = await agent.get("/");
     csrfToken2 = extractCsrfToken(aga);
-      response = await agent.put(`/todos/${latestTodo.id}`).send({
+    response = await agent.put(`/todos/${latestTodo.id}`).send({
       _csrf: csrfToken2,
       completed: false,
     });
