@@ -26,7 +26,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-    });
+    },
+    {
+      tableName:"todo"
+    }
+    );
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Todos");

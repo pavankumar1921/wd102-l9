@@ -6,6 +6,11 @@ const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 const path = require("path");
 
+const passport = require("passport");
+const connectEnsureLogin = require("connect-ensure-login");
+const session = require("express-session");
+const LocalStrategy = require("passport-local");
+
 // const todo = require("./models/todo")
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -17,9 +22,56 @@ app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
-const { Todo } = require("./models");
+
+app.use(
+  session({
+    secret: "my-super-secret-key-21728173615375893",
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    (username, password, done) => {
+      User.findOne({ where: { email: username, password: password } })
+        .then((user) => {
+          return done(null, user);
+        })
+        .catch((error) => {
+          return error;
+        });
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  console.log("Serializing user in session", user.id);
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findByPk(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((error) => {
+      done(error, null);
+    });
+});
+
+const { Todo, User } = require("./models");
 
 app.get("/", async (request, response) => {
+  console.log(request.user)
   const allTodos = await Todo.getTodos();
   const overdue = await Todo.overdue();
   const dueToday = await Todo.dueToday();
