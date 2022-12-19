@@ -21,13 +21,17 @@ app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 //app.Method(path,callback[,callback....])
 app.set("view engine", "ejs");
 
+// eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
     secret: "my-super-secret-key-21728173615375893",
+    resave :false,
+    saveUninitialized: true,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000
+
     },
   })
 );
@@ -71,6 +75,14 @@ passport.deserializeUser((id, done) => {
 const { Todo, User } = require("./models");
 
 app.get("/", async (request, response) => {
+  // console.log(request.user)
+    response.render("index", {
+      title: "Todo app",
+      csrfToken: request.csrfToken(),
+    });
+});
+
+app.get("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log(request.user)
   const allTodos = await Todo.getTodos();
   const overdue = await Todo.overdue();
@@ -78,7 +90,7 @@ app.get("/", async (request, response) => {
   const dueLater = await Todo.dueLater();
   const completedItems = await Todo.completedItems();
   if (request.accepts("html")) {
-    response.render("index", {
+    response.render("todo", {
       title: "Todo app",
       overdue,
       dueToday,
@@ -96,6 +108,30 @@ app.get("/", async (request, response) => {
   }
 });
 
+app.get("/signup", (request, response) =>{
+  response.render("signup",{title:"Signup",csrfToken: request.csrfToken() })
+})
+
+app.post("/users",async (request,response)=>{
+  console.log("Firstname",request.body.firstName)
+  //creating user
+  try{
+    const user = await User.create({
+      firstName:request.body.firstName,
+      lastName: request.lastName,
+      email: request.email,
+      password: request.password,
+    })
+    request.login(user,(err) =>{
+      if (err){
+        console.log(err)
+      }
+      response.redirect("/todos")
+    })  
+  }catch(error){
+    console.log(error)
+  }
+})
 app.get("/todos", (request, response) => {
   //response.send("hello ")
   console.log("Todo list", request.body);

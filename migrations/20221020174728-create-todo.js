@@ -10,6 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       title: {
+          allowNull: false,
+          validate: {
+            notNull: true,
+            len: 5,
+          },
         type: Sequelize.STRING,
       },
       dueDate: {
