@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       })
       // define association here
     }
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate ,userId}) {
+      return this.create({ title: title, dueDate: dueDate, completed: false ,userId});
     }
     static getTodos() {
       return this.findAll({ order: [["id", "ASC"]] });
@@ -22,41 +22,46 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
-    static overdue() {
+    static overdue(userId) {
       return this.findAll({
         where: {
           dueDate: { [Op.lt]: new Date().toLocaleDateString("en-CA") },
+          userId,
           completed: false,
         },
       });
     }
-    static dueToday() {
+    static dueToday(userId) {
       return this.findAll({
         where: {
           dueDate: { [Op.eq]: new Date().toLocaleDateString("en-CA") },
+          userId, //userId: userId
           completed: false,
         },
       });
     }
-    static dueLater() {
+    static dueLater(userId) {
       return this.findAll({
         where: {
           dueDate: { [Op.gt]: new Date().toLocaleDateString("en-CA") },
+          userId,
           completed: false,
         },
       });
     }
-    static completedItems(id) {
+    static completedItems(userId) {
       return this.findAll({
         where: {
+          userId,
           completed: true,
         },
       });
     }
-    static remove(id) {
+    static remove(userId,id) {
       return this.destroy({
         where: {
           id,
+          userId,
         },
       });
     }
