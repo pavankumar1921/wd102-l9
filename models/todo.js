@@ -8,13 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Todo.belongsTo(models.User,{
-        foreignKey: 'userId'
-      })
+      Todo.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
       // define association here
     }
-    static addTodo({ title, dueDate ,userId}) {
-      return this.create({ title: title, dueDate: dueDate, completed: false ,userId});
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({
+        title: title,
+        dueDate: dueDate,
+        completed: false,
+        userId,
+      });
     }
     static getTodos() {
       return this.findAll({ order: [["id", "ASC"]] });
@@ -57,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
-    static remove(userId,id) {
+    static remove(id, userId) {
       return this.destroy({
         where: {
           id,

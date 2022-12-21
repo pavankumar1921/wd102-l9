@@ -13,7 +13,7 @@ module.exports = {
           allowNull: false,
           validate: {
             notNull: true,
-            len: 5,
+            len: [5,20],
           },
         type: Sequelize.STRING,
       },

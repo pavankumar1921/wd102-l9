@@ -51,6 +51,7 @@
     <div class="grid grid-cols-6">
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
+        <p class="text-xl flex items-center">Welcome <%= userName %></p>
         <a href="/signout" class="text-green-600" >Signout</a>
         <form action="/todos" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -60,14 +61,14 @@
                 type="text"
                 name="title"
                 placeholder="What's next?"
-                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required
+                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" 
               />
             </div>
             <div class="flex-auto">
               <input
                 type="date"
                 name="dueDate"
-                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required
+                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" 
               />
             </div>
             <div flex="flex-none">
@@ -80,11 +81,18 @@
             </div>
           </div>
         </form>
-
+        
         <%- include('todos.ejs',{title:"Overdue",data: overdue}) %> <%-
         include('todos.ejs',{title:"Due Today",data: dueToday}) %> <%-
         include('todos.ejs',{title:"Due Later",data: dueLater}) %> <%-
-        include('todos.ejs',{title:"Completed Items",data: completedItems}) %>
+        include('todos.ejs',{title:"Completed Items",data: completedItems}) 
+        %>
+
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+          <% for(var i=0; i<messages.error.length; i++) { %>
+            <p class="bg-blue-200 my-3 list-none rounded px-4 py-2"><%= messages.error[i] %></p>
+          <% } %>
+        <% } %>
 
         <!-- <%- include('footer.ejs') %> -->
       </div>
